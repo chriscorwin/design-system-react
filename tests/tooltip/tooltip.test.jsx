@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { expect } from 'chai';
-import TestUtils from 'react-addons-test-utils';
+import TestUtils from 'react-dom/test-utils';
 
 import SLDSPopoverTooltip from '../../components/popover-tooltip';
 import SLDSButton from '../../components/button';

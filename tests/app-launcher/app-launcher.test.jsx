@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { mount, ReactWrapper } from 'enzyme';
 import assign from 'lodash.assign';
-import TestUtils from 'react-addons-test-utils';
+import TestUtils from 'react-dom/test-utils';
 
 const should = chai.should();
 

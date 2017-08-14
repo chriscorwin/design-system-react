@@ -1,7 +1,7 @@
 // Import your external dependencies
 import React from 'react';
 import PropTypes from 'prop-types';
-import TestUtils from 'react-addons-test-utils';
+import TestUtils from 'react-dom/test-utils';
 import chai, { expect } from 'chai';
 import chaiEnzyme from 'chai-enzyme';
 import classNames from 'classnames';
