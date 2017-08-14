@@ -31,6 +31,7 @@ const configExport = function (config) {
 		// list of files / patterns to load in the browser
 		files: [
 			'tests/fixtures/phantomjs-shims.js',
+			'node_modules/es6-shim/es6-shim.js',
 			'tests/tests-bundle.js'
 		],
 
