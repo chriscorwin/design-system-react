@@ -50,7 +50,7 @@ const DemoTree = React.createClass({
 		setTimeout((node) => {
 			node.loading = false;
 			this.forceUpdate();
-		}, 500, data.node);
+		}, 1, data.node);
 		data.node.expanded = data.expand;
 	},
 

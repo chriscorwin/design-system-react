@@ -48,11 +48,15 @@ const Item = (props) => {
 
 	// TODO: Remove tabbing from anchor tag / add tabIndex={-1} when keyboard navigation is present.
 	return (
-		<li id={`${props.treeId}-${props.node.id}`} role="treeitem" aria-level={props.level}>
+		<li
+			id={`${props.treeId}-${props.node.id}`}
+			role="treeitem"
+			aria-level={props.level}
+			aria-selected={isSelected ? 'true' : 'false'}
+		>
 			{/* eslint-disable jsx-a11y/no-static-element-interactions */}
 			<div
 				className={classNames('slds-tree__item', { 'slds-is-selected': isSelected })}
-				aria-selected={isSelected ? 'true' : 'false'}
 				onClick={(event) => { handleClick(event, props); }}
 			>
 				{/* eslint-enable jsx-a11y/no-static-element-interactions */}

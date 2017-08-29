@@ -10,6 +10,7 @@
 // ### React
 import React from 'react';
 import PropTypes from 'prop-types';
+import Mousetrap from 'mousetrap';
 
 // Child components
 import Branch from './private/branch';
@@ -23,54 +24,80 @@ import checkProps from './check-props';
 // ## Constants
 import { TREE } from '../../utilities/constants';
 
+
 /**
  * A tree is visualization of a structure hierarchy. A branch can be expanded or collapsed. This is a controlled component, since visual state is present in the `nodes` data.
  */
-const Tree = (props) => {
-	// TODO: This may need to be cleaned up to alert a developer when they do both that the heading is hidden.
-	checkProps(TREE, props);
+class Tree extends React.Component {
+	constructor (props) {
+		super(props);
+		this.state = {
+			nodes: props.nodes
+		};
+	}
 
-	const {
-		assistiveText,
-		className,
-		heading,
-		id,
-		listClassName,
-		nodes,
-		onClick,
-		onExpandClick,
-		onScroll,
-		searchTerm,
-		listStyle
-	} = props;
+	componentDidMount () {
+		Mousetrap.bind('?', () => { alert('keyboard shortcuts'); });
+		Mousetrap.bind('down', function () {
+			console.log('[down] runs!', this.state);
+		});
+	}
 
-	// One of these is required to pass accessibility tests
-	const headingText = assistiveText || heading;
+	componentWillUnmount () {
+		Mousetrap.unbind('?', () => { alert('keyboard shortcuts'); });
+		Mousetrap.unbind('down', function () {
+			console.log('[down] runs!', this.state);
+		});
+	}
 
-	// Start the zero level branch--that is the tree root. There is no label for
-	// the tree root, but is required by all other nodes
-	return (
-		<div id={id} className={classNames('slds-tree_container', className)} /* role="application" */>
-			<h4
-				className={classNames('slds-text-title--caps', { 'slds-assistive-text': assistiveText })}
-				id={`${id}__heading`}
-			>{headingText}</h4>
-			<Branch
-				getNodes={props.getNodes}
-				initalClassName={listClassName}
-				htmlId={id}
-				initialStyle={listStyle}
-				level={0}
-				node={{ nodes }}
-				onClick={onClick}
-				onExpandClick={onExpandClick}
-				onScroll={onScroll}
-				searchTerm={searchTerm}
-				treeId={id}
-			/>
-		</div>
-	);
-};
+	render () {
+		checkProps(TREE, this.props);
+
+		const {
+			ariaActiveTabIndex,
+			assistiveText,
+			className,
+			heading,
+			id,
+			listClassName,
+			nodes,
+			onClick,
+			onExpandClick,
+			onScroll,
+			searchTerm,
+			listStyle
+		} = this.props;
+
+		// One of these is required to pass accessibility tests
+		const headingText = assistiveText || heading;
+
+		// Start the zero level branch--that is the tree root. There is no label for
+		// the tree root, but is required by all other nodes
+		return (
+			<div id={id} className={classNames('slds-tree_container', className)} /* role="application" */>
+				<h4
+					className={classNames('slds-text-title--caps', { 'slds-assistive-text': assistiveText })}
+					id={`${id}__heading`}
+				>{headingText}</h4>
+				<Branch
+					getNodes={this.props.getNodes}
+					initalClassName={listClassName}
+					ariaActiveTabIndex={this.props.ariaActiveTabIndex}
+					htmlId={id}
+					initialStyle={listStyle}
+					level={0}
+					node={{ nodes }}
+					onClick={onClick}
+					onExpandClick={onExpandClick}
+					onScroll={onScroll}
+					searchTerm={searchTerm}
+					treeId={id}
+				/>
+			</div>
+		);
+	}
+}
+
 
 Tree.defaultProps = {
 	getNodes: (node) => node.nodes
@@ -82,6 +109,10 @@ Tree.displayName = TREE;
 
 // ### Prop Types
 Tree.propTypes = {
+	/**
+	 * For users of assistive technology, if set, sets the `tabindex` to `0` for the . Is the HTML `id` attribute of the currently focused `treeitem` node.
+	 */
+	ariaActiveTabIndex: PropTypes.string,
 	/**
 	 * For users of assistive technology, if set the heading will be hidden. One of `heading` or `assistiveText` must be set in order to label the tree.
 	 */

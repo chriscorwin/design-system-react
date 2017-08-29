@@ -71,7 +71,7 @@ const renderInitialNode = (children, props) => (
 	<ul
 		aria-labelledby={`${props.htmlId}__heading`}
 		// TODO
-		// aria-activedescendant=""
+		aria-activedescendant={props.ariaActivedescendant}
 		className={classNames('slds-tree', props.initalClassName)}
 		onScroll={(event) => { handleScroll(event, props); }}
 		role="tree"
@@ -152,6 +152,7 @@ const renderBranch = (children, props) => {
 			role="treeitem"
 			aria-level={props.level}
 			aria-expanded={isExpanded ? 'true' : 'false'}
+			aria-selected={isSelected ? 'true' : 'false'}
 		>
 			{/* eslint-disable jsx-a11y/no-static-element-interactions */}
 			<div
