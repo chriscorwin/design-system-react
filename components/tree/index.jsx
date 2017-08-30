@@ -32,22 +32,132 @@ class Tree extends React.Component {
 	constructor (props) {
 		super(props);
 		this.state = {
-			nodes: props.nodes
+			nodes: props.nodes,
+			visibleNodes: [],
+			focusedNode: props.ariaActiveTabIndex || 0
 		};
 	}
 
 	componentDidMount () {
+		console.log('[componentDidMount]', this.state.nodes);
+		this._logNodes();
+
 		Mousetrap.bind('?', () => { alert('keyboard shortcuts'); });
-		Mousetrap.bind('down', function () {
-			console.log('[down] runs!', this.state);
+
+		Mousetrap.bind('down', () => {
+			console.log('[down] runs!', this._getVisibleNodes(this.state.nodes));
+
+			this.setState({
+				visibleNodes: this._getVisibleNodes(this.state.nodes)
+			});
+			
+			// find the index of the _next_ visible node
+			const currentFocusedNodeID = this.state.visibleNodes[this.state.focusedNode];
+			const newFocusedNodeID =  this.state.visibleNodes[this.state.focusedNode + 1];
+			
+			//  =  this.state.visibleNodes.findIndex(function (thang) {
+			// 	return thang === this.state.focusedNode;
+			// });
+			// const newFocusedNodeIndex = currentFocusedNodeIndex + 1;
+			
+			console.log('currentFocusedNodeID', currentFocusedNodeID);
+			console.log('newFocusedNodeID', newFocusedNodeID || 'undefined');
+			
+			if (typeof newFocusedNodeID === 'undefined') {
+				this.setState({
+					focusedNode: 0
+				});
+			} else {
+				this.setState({
+					focusedNode: this.state.focusedNode + 1
+				});
+			}
 		});
-	}
+
+		Mousetrap.bind('up', () => {
+			console.log('[up] runs!', this._getVisibleNodes(this.state.nodes));
+
+			this.setState({
+				visibleNodes: this._getVisibleNodes(this.state.nodes)
+			});
+			
+			let focusedNodeToFind = this.state.focusedNode - 1;
+			if (this.state.focusedNode === 0) {
+				focusedNodeToFind = this.state.visibleNodes.length - 1;
+			}
+			console.log('focusedNodeToFind', focusedNodeToFind);
+			
+			// find the index of the _next_ visible node
+			const currentFocusedNodeID = this.state.visibleNodes[this.state.focusedNode];
+			const newFocusedNodeID =  this.state.visibleNodes[focusedNodeToFind];
+			
+			//  =  this.state.visibleNodes.findIndex(function (thang) {
+			// 	return thang === this.state.focusedNode;
+			// });
+			// const newFocusedNodeIndex = currentFocusedNodeIndex + 1;
+			
+			console.log('currentFocusedNodeID', currentFocusedNodeID);
+			console.log('newFocusedNodeID', newFocusedNodeID || 'undefined');
+			
+			this.setState({
+				focusedNode: focusedNodeToFind
+			});
+		});
+	};
 
 	componentWillUnmount () {
 		Mousetrap.unbind('?', () => { alert('keyboard shortcuts'); });
-		Mousetrap.unbind('down', function () {
-			console.log('[down] runs!', this.state);
+		Mousetrap.unbind('down', () => {});
+		Mousetrap.unbind('up', () => {});
+	}
+
+	_getNodeHtmlIdFromId (id) {
+			
+	};
+
+	_logNodes () {
+		this.state.nodes.forEach((node) => {
+			// console.log('node', node);
+
+			// Or, using array extras
+			// console.log('node.nodes type', typeof node.nodes);
+			// console.log('is undefined?', typeof node.nodes === 'undefined');
+
+			// Object.entries(node).forEach(([key, value]) => {
+			// 	console.log(key + ' ' + value);
+			// });
+
+			// for (const [key, value] of node) {
+			// 	console.log(`${key}'s \`nodes\` is: `, value);
+			// }
 		});
+	};
+
+	_getVisibleNodes (nodesToTest) {
+		// the array of nodes we will return
+		let visibleNodes = [];
+
+		nodesToTest.forEach((node) => {
+			// console.group('[nodesToTest.forEach] node.label', node.label);
+			if ((typeof node.expanded === 'undefined' || node.expanded === false) && typeof node.nodes === 'undefined') {
+				visibleNodes.push(node.id);
+			} else if ((typeof node.expanded === 'undefined' || node.expanded === false) && typeof node.nodes !== 'undefined') {
+				visibleNodes.push(node.id);
+			} else if (node.expanded === true && typeof node.nodes !== 'undefined' && node.nodes.length > 0) {
+				visibleNodes.push(node.id);
+				visibleNodes = visibleNodes.concat(this._getVisibleNodes(node.nodes));
+			} else if (node.expanded === false && typeof node.nodes !== 'undefined' && node.nodes.length > 0) {
+				visibleNodes.push(node.id);
+			} else if (node.expanded === true && typeof node.nodes === 'undefined') {
+				visibleNodes.push(node.id);
+			} else if (node.expanded === true && (typeof node.nodes !== 'undefined' && node.nodes.length === 0)) {
+				visibleNodes.push(node.id);
+			}
+			// console.groupEnd();
+		});
+
+		// console.log('[_getVisibleNodes] will return: visibleNodes', visibleNodes);
+		return visibleNodes;
 	}
 
 	render () {
@@ -82,7 +192,7 @@ class Tree extends React.Component {
 				<Branch
 					getNodes={this.props.getNodes}
 					initalClassName={listClassName}
-					ariaActiveTabIndex={this.props.ariaActiveTabIndex}
+					ariaActiveTabIndex={this.state.ariaActiveTabIndex}
 					htmlId={id}
 					initialStyle={listStyle}
 					level={0}
@@ -96,7 +206,7 @@ class Tree extends React.Component {
 			</div>
 		);
 	}
-}
+};
 
 
 Tree.defaultProps = {
