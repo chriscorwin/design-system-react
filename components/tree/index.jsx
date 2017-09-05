@@ -45,7 +45,7 @@ class Tree extends React.Component {
 		Mousetrap.bind('?', () => { alert('keyboard shortcuts'); });
 
 		Mousetrap.bind('down', () => {
-			console.log('[down] runs!', this._getVisibleNodes(this.state.nodes));
+			// console.log('[down] runs!', this._getVisibleNodes(this.state.nodes));
 
 			this.setState({
 				visibleNodes: this._getVisibleNodes(this.state.nodes)
@@ -139,18 +139,58 @@ class Tree extends React.Component {
 
 		nodesToTest.forEach((node) => {
 			// console.group('[nodesToTest.forEach] node.label', node.label);
-			if ((typeof node.expanded === 'undefined' || node.expanded === false) && typeof node.nodes === 'undefined') {
+			if (
+				(
+					typeof node.expanded === 'undefined'
+					||
+					node.expanded === false
+				)
+				&&
+				typeof node.nodes === 'undefined'
+			) {
 				visibleNodes.push(node.id);
-			} else if ((typeof node.expanded === 'undefined' || node.expanded === false) && typeof node.nodes !== 'undefined') {
+			} else if (
+				(
+					typeof node.expanded === 'undefined'
+					||
+					node.expanded === false
+				)
+				&&
+				typeof node.nodes !== 'undefined'
+			) {
 				visibleNodes.push(node.id);
-			} else if (node.expanded === true && typeof node.nodes !== 'undefined' && node.nodes.length > 0) {
+			} else if (
+				node.expanded === true
+				&&
+				typeof node.nodes !== 'undefined'
+				&&
+				node.nodes.length > 0
+			) {
 				visibleNodes.push(node.id);
 				visibleNodes = visibleNodes.concat(this._getVisibleNodes(node.nodes));
-			} else if (node.expanded === false && typeof node.nodes !== 'undefined' && node.nodes.length > 0) {
+			} else if (
+				node.expanded === false
+				&&
+				typeof node.nodes !== 'undefined'
+				&&
+				node.nodes.length > 0
+			) {
 				visibleNodes.push(node.id);
-			} else if (node.expanded === true && typeof node.nodes === 'undefined') {
+			} else if (
+				node.expanded === true
+				&&
+				typeof node.nodes === 'undefined'
+			) {
 				visibleNodes.push(node.id);
-			} else if (node.expanded === true && (typeof node.nodes !== 'undefined' && node.nodes.length === 0)) {
+			} else if (
+				node.expanded === true
+				&&
+				(
+					typeof node.nodes !== 'undefined'
+					&&
+					node.nodes.length === 0
+				)
+			) {
 				visibleNodes.push(node.id);
 			}
 			// console.groupEnd();
