@@ -42,6 +42,10 @@ class Tree extends React.Component {
 		console.log('[componentDidMount]', this.state.nodes);
 		this._logNodes();
 
+		this.setState({
+			visibleNodes: this._getVisibleNodes(this.state.nodes)
+		});
+
 		Mousetrap.bind('?', () => { alert('keyboard shortcuts'); });
 
 		Mousetrap.bind('down', () => {
@@ -51,9 +55,15 @@ class Tree extends React.Component {
 				visibleNodes: this._getVisibleNodes(this.state.nodes)
 			});
 			
+			let focusedNodeToFind = this.state.focusedNode + 1;
+			if (this.state.focusedNode === this.state.visibleNodes.length - 1) {
+				focusedNodeToFind = 0;
+			}
+			console.log('focusedNodeToFind', focusedNodeToFind);
+			
 			// find the index of the _next_ visible node
 			const currentFocusedNodeID = this.state.visibleNodes[this.state.focusedNode];
-			const newFocusedNodeID =  this.state.visibleNodes[this.state.focusedNode + 1];
+			const newFocusedNodeID =  this.state.visibleNodes[focusedNodeToFind];
 			
 			//  =  this.state.visibleNodes.findIndex(function (thang) {
 			// 	return thang === this.state.focusedNode;
@@ -63,15 +73,10 @@ class Tree extends React.Component {
 			console.log('currentFocusedNodeID', currentFocusedNodeID);
 			console.log('newFocusedNodeID', newFocusedNodeID || 'undefined');
 			
-			if (typeof newFocusedNodeID === 'undefined') {
-				this.setState({
-					focusedNode: 0
-				});
-			} else {
-				this.setState({
-					focusedNode: this.state.focusedNode + 1
-				});
-			}
+			this.setState({
+				focusedNode: focusedNodeToFind
+			});
+
 		});
 
 		Mousetrap.bind('up', () => {
