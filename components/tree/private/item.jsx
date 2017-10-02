@@ -29,6 +29,8 @@ import { TREE_ITEM } from '../../../utilities/constants';
 
 
 const	handleClick = (event, props) => {
+	console.log('[Tree > Item] handleClick runs, event', event);
+	console.log('[Tree > Item] handleClick runs, props', props);
 	EventUtil.trap(event);
 
 	if (isFunction(props.onClick)) {
@@ -51,12 +53,13 @@ const Item = (props) => {
 		<li
 			id={`${props.treeId}-${props.node.id}`}
 			role="treeitem"
+			tabIndex={props.tabIndex}
 			aria-level={props.level}
 			aria-selected={isSelected ? 'true' : 'false'}
 		>
 			{/* eslint-disable jsx-a11y/no-static-element-interactions */}
 			<div
-				className={classNames('slds-tree__item', { 'slds-is-selected': isSelected })}
+				className={classNames('slds-tree__item', { 'slds-is-selected': isSelected, 'slds-is-focused': props.tabIndex === '0' })}
 				onClick={(event) => { handleClick(event, props); }}
 			>
 				{/* eslint-enable jsx-a11y/no-static-element-interactions */}

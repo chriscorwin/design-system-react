@@ -36,7 +36,12 @@ import { TREE_BRANCH } from '../../../utilities/constants';
 const handleExpandClick = (event, props) => {
 	EventUtil.trap(event);
 
+	// console.log('[Tree > Branch -> handleExpandClick] event', event);
+	// console.log('[Tree > Branch -> handleExpandClick] event.key', event.key);
+	
 	if (isFunction(props.onExpandClick)) {
+		// console.log('[Tree > Branch -> handleExpandClick] props.node', props.node);
+		
 		props.onExpandClick(event, {
 			node: props.node,
 			expand: !props.node.expanded,
@@ -46,6 +51,7 @@ const handleExpandClick = (event, props) => {
 };
 
 const handleClick = (event, props) => {
+	console.log('[Tree > Branch] handleClick runs, event', event);
 	EventUtil.trap(event);
 	if (isFunction(props.onClick)) {
 		props.onClick(event, {
@@ -149,6 +155,7 @@ const renderBranch = (children, props) => {
 	return (
 		<li
 			id={props.htmlId}
+			tabIndex={props.tabIndex}
 			role="treeitem"
 			aria-level={props.level}
 			aria-expanded={isExpanded ? 'true' : 'false'}
@@ -156,7 +163,7 @@ const renderBranch = (children, props) => {
 		>
 			{/* eslint-disable jsx-a11y/no-static-element-interactions */}
 			<div
-				className={classNames('slds-tree__item', { 'slds-is-selected': isSelected })}
+				className={classNames('slds-tree__item', { 'slds-is-selected': isSelected, 'slds-is-focused': props.tabIndex === '0' })}
 				onClick={(event) => { handleClick(event, props); }}
 			>
 				{/* eslint-enable jsx-a11y/no-static-element-interactions */}
@@ -243,7 +250,9 @@ const Branch = (props) => {
 		treeId,
 		level,
 		onExpandClick,
-		searchTerm
+		searchTerm,
+		visibleFocusedNodeId,
+		visibleFocusedNodeValue
 	} = props;
 
 	if (Array.isArray(props.getNodes(props.node))) {
@@ -264,6 +273,9 @@ const Branch = (props) => {
 						label={node.label}
 						level={level + 1}
 						node={node}
+						tabIndex={visibleFocusedNodeValue === node.id ? '0' : '-1'}
+						visibleFocusedNodeValue={visibleFocusedNodeValue}
+						visibleFocusedNodeId={visibleFocusedNodeId}
 						nodes={node.nodes}
 						onClick={props.onClick}
 						onExpandClick={onExpandClick}
@@ -279,6 +291,9 @@ const Branch = (props) => {
 						htmlId={htmlId}
 						key={shortid.generate()}
 						level={level + 1}
+						tabIndex={visibleFocusedNodeValue === node.id ? '0' : '-1'}
+						visibleFocusedNodeValue={visibleFocusedNodeValue}
+						visibleFocusedNodeId={visibleFocusedNodeId}
 						node={node}
 						onClick={props.onClick}
 						searchTerm={searchTerm}

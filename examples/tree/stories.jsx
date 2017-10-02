@@ -43,7 +43,8 @@ const DemoTree = React.createClass({
 
 	// By default Tree can have multiple selected nodes and folders/branches can be selected. To disable either of these, you can use the following logic. However, `props` are immutable. The node passed in shouldn't be modified, and due to object and arrays being reference variables, forceUpate is needed. This is just a "working example" not a prescription.
 	handleExpandClick (event, data) {
-		branchExpandClicked('Expand Branch')(event, data);
+		branchExpandClicked('[Tree stories] Expand Branch runs!')(event, data);
+		// console.log('[Tree stories] Expand Branch runs!', event, data);
 		data.node.loading = data.expand ? true : undefined;
 
 		// Fake delay to demonstrate use of loading node attibute
@@ -55,6 +56,7 @@ const DemoTree = React.createClass({
 	},
 
 	handleClick (event, data) {
+		console.log('[Tree stories] handleClick runs!');
 		if (this.props.singleSelection) {
 			data.node.selected = data.select;
 			this.setState({ singleSelection: data.node });
