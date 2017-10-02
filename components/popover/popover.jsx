@@ -8,6 +8,7 @@
 
 // ### React
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
 // ### assign
@@ -72,7 +73,7 @@ const PopoverNubbinPositions = [
 /**
  * The Popover component is a non-modal dialog. It should be paired with a clickable trigger such as a `Button`. It traps focus from the page and must be exited if focus needs to be outside the Popover. Use a `Tooltip` if there are no call to actions within the dialog. A `Tooltip` does not need to be clicked.
  */
-const Popover = React.createClass({
+const Popover = createReactClass({
 	// ### Display Name
 	// Always use the canonical component name as the React display name.
 	displayName: POPOVER,
@@ -437,7 +438,7 @@ const Popover = React.createClass({
 							assistiveText={props.closeButtonAssistiveText}
 							iconName="close"
 							iconSize="small"
-							className="slds-float--right slds-popover__close"
+							className="slds-button slds-button--icon-small slds-float--right slds-popover__close slds-button--icon"
 							onClick={this.handleCancel}
 							variant="icon"
 						/>

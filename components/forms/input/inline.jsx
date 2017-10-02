@@ -9,6 +9,7 @@
 
 // ### React
 import React from 'react';
+import createReactClass from 'create-react-class';
 import PropTypes from 'prop-types';
 
 // ### isFunction
@@ -28,7 +29,7 @@ import { FORMS_INLINE_EDIT } from '../../../utilities/constants';
 /**
  * An inline input is rendered as a label by default. When clicked (or tabbed in), it's rendered as an input. When the focus is lost, the current input value is saved and the input is rendered as a label again.
  */
-const InlineEdit = React.createClass({
+const InlineEdit = createReactClass({
 	// ### Display Name
 	// Always use the canonical component name as the React display name.
 	displayName: FORMS_INLINE_EDIT,
@@ -59,6 +60,18 @@ const InlineEdit = React.createClass({
 		 * This event fires when the input changes.
 		 */
 		onChange: PropTypes.func,
+		/**
+		* Function will run when keyup during text edit
+		*/
+		onKeyUp: PropTypes.func,
+		/**
+		* Function will run when we enter edit mode
+		*/
+		onEnterEditMode: PropTypes.func,
+		/**
+		* Function will run when we leave edit mode
+		*/
+		onLeaveEditMode: PropTypes.func,
 		/**
 		 * Typically an Inline Edit component will be of the type text, but like the Input element it includes support for all HTML5 types.
 		 */
@@ -137,6 +150,7 @@ const InlineEdit = React.createClass({
 				onChange={this.handleChange}
 				onClick={!this.state.isEditing ? this.triggerEditMode : null}
 				onKeyDown={this.handleKeyDown}
+				onKeyUp={this.props.handleKeyUp}
 				readOnly={!this.state.isEditing}
 				name={name}
 				value={this.state.isEditing ? this.state.value : value}
@@ -165,20 +179,24 @@ const InlineEdit = React.createClass({
 				isEditing: true,
 				value: this.props.value
 			});
+			if (isFunction(this.props.onEnterEditMode)) {
+				this.props.onEnterEditMode();
+			}
 		}
 	},
 
-	saveEdits () {
-		if (isFunction(this.props.onChange)) {
-			this.props.onChange({
-				value: this.state.value
-			});
+	saveEdits (option) {
+		if (!(option && option.cancel === true)) {
+			if (isFunction(this.props.onChange)) {
+				this.props.onChange({
+					value: this.state.value
+				});
+			}
 		}
-
-		this.endEditMode();
+		this.endEditMode(option);
 	},
 
-	endEditMode () {
+	endEditMode (option) {
 		if (this.willSave) {
 			clearTimeout(this.willSave);
 			delete this.willSave;
@@ -188,11 +206,18 @@ const InlineEdit = React.createClass({
 			isEditing: false,
 			value: null
 		});
+
+		if (this.props.onLeaveEditMode && isFunction(this.props.onLeaveEditMode)) {
+			this.props.onLeaveEditMode(undefined, option);
+		}
 	},
 
 	handleBlur () {
 		if (!this.willSave) {
 			this.willSave = setTimeout(this.saveEdits, 200);
+		}
+		if (this.props.onLeaveEditMode && isFunction(this.props.onLeaveEditMode)) {
+			this.props.onLeaveEditMode();
 		}
 	},
 
@@ -205,9 +230,19 @@ const InlineEdit = React.createClass({
 	handleKeyDown (event) {
 		if (event.keyCode) {
 			if (event.keyCode === KEYS.ESCAPE) {
-				this.endEditMode();
+				this.saveEdits({ cancel: true });
 			} else if (event.keyCode === KEYS.ENTER) {
 				this.saveEdits();
+			}
+		}
+	},
+
+	handleKeyUp (event) {
+		if (event.keyCode) {
+			if (this.props.onKeyUp && isFunction(this.props.onKeyUp)) {
+				this.props.onKeyUp(event, {
+					value: this.state.value
+				});
 			}
 		}
 	}

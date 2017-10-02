@@ -4,6 +4,9 @@
 export SLDSSettings from './settings';
 export Settings from './settings';
 
+export SLDSAvatar from './avatar';
+export Avatar from './avatar';
+
 export SLDSButton from './button';
 export Button from './button';
 
@@ -20,7 +23,6 @@ export BreadCrumb from './breadcrumb';
 export SLDSBreadcrumb from './breadcrumb';
 export Breadcrumb from './breadcrumb';
 
-
 export SLDSCard from './card';
 export Card from './card';
 
@@ -32,6 +34,12 @@ export CardFilter from './card/filter';
 
 export SLDSCheckbox from './forms/checkbox';
 export Checkbox from './forms/checkbox';
+
+export SLDSCombobox from './combobox';
+export Combobox from './combobox';
+
+export SLDSComboboxFilterAndLimit from './combobox/filter';
+export comboboxFilterAndLimit from './combobox/filter';
 
 export SLDSGlobalHeader from './global-header';
 export GlobalHeader from './global-header';
@@ -147,6 +155,12 @@ export SLDSTooltip from './tooltip';
 
 export SLDSProgressIndicator from './progress-indicator';
 export ProgressIndicator from './progress-indicator';
+
+export SLDSRadio from './radio-button-group/radio';
+export Radio from './radio-button-group/radio';
+
+export SLDSRadioButtonGroup from './radio-button-group';
+export RadioButtonGroup from './radio-button-group';
 
 export SLDSSpinner from './spinner';
 export Spinner from './spinner';
