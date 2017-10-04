@@ -119,6 +119,20 @@ class Tree extends React.Component {
 	 */
 	componentDidMount () {
 		console.log('[componentDidMount]', this.state.nodes);
+
+		/**
+		 * **Expected Keyboard Navigation**
+		 *
+		 * Clicking on a tree item creates a selection
+		 * Up and Down arrow keys move :focus and aria-selected. Previous selections are cleared
+		 * Right arrow key to expand collapsed node.
+		 * Left arrow key to collapse expanded node.
+		 * Left arrow key on an end child node, collapses the group and moves :focus and aria-selected to the parent treeitem
+		 * Enter performs the default action on an end tree item (if there is one).
+		 * Ctrl + Up and Ctrl + Down moves focus. Current selection is maintained
+		 * Ctrl + Space will add or remove the currently focused tree item to the selection
+		 */
+
 		this._logNodes();
 
 		this.setState({
@@ -231,7 +245,7 @@ class Tree extends React.Component {
 				}
 			}
 		} else {
-			for (let [key, value] of Object.entries(theObject)) {
+			for (const [key, value] of Object.entries(theObject)) {
 				if (key === 'id' && theObject[key] === nodeId) {
 					found = true;
 					result = theObject;
@@ -306,12 +320,12 @@ class Tree extends React.Component {
 				}
 				/**
 				 * When hitting left arrow, we only actually bother toggling the expanded attribute if we are on a branch and it simply needs closed.
-				 * 
+				 *
 				 * If we are on an already closed branch or on an item, we move the focus up to the parent but do not toggle any expansion.
 				 */
 				doTheExpand = oldNodeType.type === 'branch';
 
-				// 
+				//
 				overrideDoTheExpand = true;
 				newVisibleFocusedNodeId = this.state.visibleNodes.indexOf(theNode.id);
 				newVisibleFocusedNodeValue = theNode.id;
@@ -325,16 +339,15 @@ class Tree extends React.Component {
 		}
 
 		if (doTheExpand) {
-				console.log('doTheExpand', doTheExpand);
-				if (isFunction(this.props.onExpandClick)) {
-					this.props.onExpandClick(event, {
-						node: theNode,
-						expand: newExpandValue,
-						treeIndex: props.treeIndex
-					});
-				}
+			console.log('doTheExpand', doTheExpand);
+			if (isFunction(this.props.onExpandClick)) {
+				this.props.onExpandClick(event, {
+					node: theNode,
+					expand: newExpandValue,
+					treeIndex: props.treeIndex
+				});
+			}
 		}
-
 
 		this.setState({
 			visibleNodes: this._getVisibleNodes(this.state.nodes),
@@ -422,7 +435,7 @@ class Tree extends React.Component {
 		// the array of nodes we will return
 		
 		let flattenedNodes = [];
-		let newParentId = parentId;
+		const newParentId = parentId;
 		
 		nodesToTest.forEach((node) => {
 			// console.group('[nodesToTest.forEach] node.label', node.label);
@@ -498,7 +511,6 @@ class Tree extends React.Component {
 		);
 	}
 }
-
 
 
 Tree.displayName = TREE;
