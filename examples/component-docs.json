@@ -3399,7 +3399,7 @@
                             "name": "string"
                         }
                     ]
-                },
+            },
                 "required": false,
                 "description": "CSS classes that are applied to the span."
             },
@@ -6179,7 +6179,7 @@
             "onFocus": {
                 "type": {
                     "name": "func"
-                },
+            },
                 "required": false,
                 "description": "Triggered when input is focused."
             },
@@ -9619,7 +9619,7 @@
                 "modifiers": [],
                 "params": [],
                 "returns": null
-            },
+    },
             {
                 "name": "getErrorId",
                 "docblock": null,

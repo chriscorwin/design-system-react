@@ -1,132 +1,172 @@
 const treeNodesWithInitialState = [
-	{
-		label: 'Grains',
-		type: 'item',
-		id: 1,
-		selected: true
-	},
-	{
-		label: 'Fruits',
-		type: 'branch',
-		id: 2,
-		expanded: true,
-		nodes: [
-			{
-				label: 'Ground Fruits',
+		{
+				label: 'Grains',
+				type: 'item',
+				id: 'grains',
+				selected: true
+		},
+		{
+				label: 'Legumes',
+				type: 'item',
+				id: 'legumes',
+				selected: false
+		},
+		{
+				label: 'Fruits',
 				type: 'branch',
-				id: 4,
+				id: 'fruits',
+				expanded: true,
 				nodes: [
-					{
-						label: 'Watermelon', type: 'item', id: 12
-					},
-					{
-						label: 'Canteloupe', type: 'item', _iconClass: 'glyphicon-file', id: 13
-					},
-					{
-						label: 'Strawberries', type: 'item', id: 14
-					}
-				]
-			},
-			{
-				label: 'Tree Fruits',
-				type: 'branch',
-				id: 5,
-				selected: true,
-				nodes: [
-					{
-						label: 'Peaches',
-						type: 'item',
-						id: 15
-					},
-					{
-						label: 'Pears',
-						type: 'item',
-						_iconClass: 'glyphicon-file',
-						id: 16
-					},
-					{
-						label: 'Citrus',
-						type: 'branch',
-						id: 17,
-						nodes: [{
-							label: 'Orange', type: 'item', id: 20
+						{
+								label: 'Ground Fruits',
+								type: 'branch',
+								id: 'ground-fruits',
+								nodes: [
+										{
+												label: 'Watermelon',
+												type: 'item',
+												id: 'watermelon'
+										}, {
+												label: 'Canteloupe',
+												type: 'item',
+												'canteloupe': 'glyphicon-file',
+												id: 'canteloupe'
+										}, {
+												label: 'Strawberries',
+												type: 'item',
+												id: 'strawberries'
+										}
+								]
 						}, {
-							label: 'Grapefruit', type: 'item', id: 21
-						}, {
-							label: 'Lemon', type: 'item', id: 22
-						}, {
-							label: 'Lime', type: 'item', id: 23
+								label: 'Tree Fruits',
+								type: 'branch',
+								id: 'tree-fruits',
+								selected: true,
+								nodes: [
+										{
+												label: 'Peaches',
+												type: 'item',
+												id: 'peaches'
+										}, {
+												label: 'Pears',
+												type: 'item',
+												'pears': 'glyphicon-file',
+												id: 'pears'
+										}, {
+												label: 'Citrus',
+												type: 'branch',
+												id: 'citrus',
+												nodes: [
+														{
+																label: 'Orange',
+																type: 'item',
+																id: 'orange'
+														}, {
+																label: 'Grapefruit',
+																type: 'item',
+																id: 'grapefruit'
+														}, {
+																label: 'Lemon',
+																type: 'item',
+																id: 'lemon'
+														}, {
+																label: 'Lime',
+																type: 'item',
+																id: 'lime'
+														}
+												]
+										}, {
+												label: 'Apples',
+												type: 'branch',
+												id: 'apples',
+												nodes: [
+														{
+																label: 'Granny Smith',
+																type: 'item',
+																id: 'granny-smith'
+														}, {
+																label: 'Pinklady',
+																type: 'item',
+																id: 'pinklady'
+														}, {
+																label: 'Rotten',
+																type: 'item',
+																id: 'rotten'
+														}, {
+																label: 'Jonathan',
+																type: 'item',
+																id: 'jonathan'
+														}
+												]
+										}, {
+												label: 'Cherries',
+												type: 'branch',
+												id: 'cherries',
+												nodes: [
+														{
+																label: 'Balaton',
+																type: 'item',
+																id: 'balaton'
+														}, {
+																label: 'Erdi Botermo',
+																type: 'item',
+																id: 'erdi-botermo'
+														}, {
+																label: 'Montmorency',
+																type: 'item',
+																id: 'montmorency'
+														}, {
+																label: 'Queen Ann',
+																type: 'item',
+																id: 'queen-ann'
+														}, {
+																label: 'Ulster',
+																type: 'item',
+																id: 'ulster'
+														}, {
+																label: 'Viva',
+																type: 'item',
+																id: 'viva'
+														}
+												]
+										}, {
+												label: 'Raspberries',
+												type: 'item',
+												id: 'raspberries'
+										}
+								]
 						}
-						]
-					},
-					{
-						label: 'Apples',
-						type: 'branch',
-						id: 18,
-						nodes: [
-							{
-								label: 'Granny Smith', type: 'item', id: 24
-							}, {
-								label: 'Pinklady', type: 'item', _iconClass: 'glyphicon-file', id: 25
-							}, {
-								label: 'Rotten', type: 'item', id: 26
-							}, {
-								label: 'Jonathan', type: 'item', id: 27
-							}
-						]
-					},
-					{
-						label: 'Cherries',
-						type: 'branch',
-						id: 19,
-						nodes: [
-							{
-								label: 'Balaton', type: 'item', id: 28
-							}, {
-								label: 'Erdi Botermo', type: 'item', id: 29
-							}, {
-								label: 'Montmorency', type: 'item', id: 30
-							}, {
-								label: 'Queen Ann', type: 'item', id: 31
-							}, {
-								label: 'Ulster', type: 'item', id: 32
-							}, {
-								label: 'Viva', type: 'item', id: 33
-							}
-						]
-					},
-					{
-						label: 'Raspberries',
-						type: 'item',
-						id: 6
-					}
 				]
-			}
-		]
-	},
-	{
-		label: 'Nuts',
-		type: 'branch',
-		_iconClass: 'glyphicon-file',
-		id: 3,
-		nodes: [
-			{
-				label: 'Almonds', type: 'item', id: 8
-			}, {
-				label: 'Cashews', type: 'item', id: 9
-			}, {
-				label: 'Pecans', type: 'item', id: 10
-			}, {
-				label: 'Walnuts', type: 'item', id: 11
-			}
-		]
-	},
-	{
-		label: 'Empty folder',
-		type: 'branch',
-		id: 7,
-		expanded: true
-	}
+		}, {
+				label: 'Nuts',
+				type: 'branch',
+				'nuts': 'glyphicon-file',
+				id: 'nuts',
+				nodes: [
+						{
+								label: 'Almonds',
+								type: 'item',
+								id: 'almonds'
+						}, {
+								label: 'Cashews',
+								type: 'item',
+								id: 'cashews'
+						}, {
+								label: 'Pecans',
+								type: 'item',
+								id: 'pecans'
+						}, {
+								label: 'Walnuts',
+								type: 'item',
+								id: 'walnuts'
+						}
+				]
+		}, {
+				label: 'Empty folder',
+				type: 'branch',
+				id: 'empty-folder',
+				expanded: true
+		}
 ];
 
 export default treeNodesWithInitialState;

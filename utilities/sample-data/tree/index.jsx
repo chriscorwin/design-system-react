@@ -1,5 +1,6 @@
 import sampleNodesWithLargeDataset from './sample-nodes-with-large-dataset';
 import sampleNodesWithInitialState from './sample-nodes-with-initial-state';
+import sampleNodesReallySmall from './sample-nodes-really-small';
 
 const sampleNodesDefault = [
 	{
@@ -131,6 +132,7 @@ const sampleNodesDefault = [
 const sampleNodes = {
 	sampleNodesDefault,
 	sampleNodesWithLargeDataset,
+	sampleNodesReallySmall,
 	sampleNodesWithInitialState
 };
 

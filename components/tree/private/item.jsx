@@ -29,6 +29,8 @@ import { TREE_ITEM } from '../../../utilities/constants';
 
 
 const	handleClick = (event, props) => {
+	console.log('[Tree > Item] handleClick runs, event', event);
+	console.log('[Tree > Item] handleClick runs, props', props);
 	EventUtil.trap(event);
 
 	if (isFunction(props.onClick)) {
@@ -48,11 +50,21 @@ const Item = (props) => {
 
 	// TODO: Remove tabbing from anchor tag / add tabIndex={-1} when keyboard navigation is present.
 	return (
-		<li id={`${props.treeId}-${props.node.id}`} role="treeitem" aria-level={props.level}>
+		<li
+			id={`${props.treeId}-${props.node.id}`}
+			role="treeitem"
+			ref={(component) => {
+				if (props.treeHasFocus && props.active) {
+					props.onRequestFocus(undefined, { ref: component });
+				}
+			}}
+			tabIndex={props.tabIndex}
+			aria-level={props.level}
+			aria-selected={isSelected ? 'true' : 'false'}
+		>
 			{/* eslint-disable jsx-a11y/no-static-element-interactions */}
 			<div
-				className={classNames('slds-tree__item', { 'slds-is-selected': isSelected })}
-				aria-selected={isSelected ? 'true' : 'false'}
+				className={classNames('slds-tree__item', { 'slds-is-selected': isSelected, 'slds-is-focused': props.tabIndex === '0' })}
 				onClick={(event) => { handleClick(event, props); }}
 			>
 				{/* eslint-enable jsx-a11y/no-static-element-interactions */}
