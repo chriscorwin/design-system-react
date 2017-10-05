@@ -1,15 +1,20 @@
 import React from 'react';
 import Avatar from '~/components/avatar'; // `~` is replaced with design-system-react at runtime
+import IconSettings from '~/components/iconSettings';
 
 const Example = React.createClass({
 	displayName: 'AvatarExample',
 
 	render () {
-		return (<Avatar
-			assistiveText="Avatar image"
-			imgSrc="https://lightningdesignsystem.com/assets/images/avatar2.jpg"
-			imgAlt="Person Name"
-		/>);
+		return (
+			<IconSettings iconPath="/assets/icons">
+				<Avatar
+					assistiveText="Avatar image"
+					imgSrc="https://lightningdesignsystem.com/assets/images/avatar2.jpg"
+					imgAlt="Person Name"
+				/>
+			</IconSettings>
+		);
 	}
 });
 
