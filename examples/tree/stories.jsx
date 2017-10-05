@@ -28,7 +28,7 @@ const DemoTree = createReactClass({
 
 	getDefaultProps () {
 		return {
-			exampleNodesIndex: 'sampleNodesDefault',
+			exampleNodesIndex: 'sampleNodesReallySmall',
 			id: 'example-tree'
 		};
 	},

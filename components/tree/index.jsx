@@ -104,11 +104,12 @@ class Tree extends React.Component {
 	constructor (props) {
 		super(props);
 		this.state = {
+			treeHasFocus: true,
 			nodes: props.nodes,
 			flattenedNodes: this._getFlattenedNodes(props.nodes),
 			visibleNodes: this._getVisibleNodes(props.nodes),
-			visibleFocusedNodeId: props.ariaActiveTabIndex || -1,
-			visibleFocusedNodeValue: props.ariaActiveTabValue || -1
+			visibleNodesActiveIndex: props.ariaActiveTabIndex || -1,
+			visibleNodesActiveIdFromOriginalNodesData: props.ariaActiveTabValue || -1
 		};
 		this.handleClick = this.handleClick.bind(this);
 		this.handleExpandClick = this.handleExpandClick.bind(this);
@@ -145,15 +146,15 @@ class Tree extends React.Component {
 		Mousetrap.bind('tab', () => {
 			console.log('tab!');
 			
-			let focusedNodeToFind = this.state.visibleFocusedNodeId + 1;
-			// Allows "wrapping" of the nodes -- if the visibleFocusedNodeId is bigger than the array of visible nodes we manually set it to 0.
-			if (this.state.visibleFocusedNodeId === this.state.visibleNodes.length - 1) {
+			let focusedNodeToFind = this.state.visibleNodesActiveIndex + 1;
+			// Allows "wrapping" of the nodes -- if the visibleNodesActiveIndex is bigger than the array of visible nodes we manually set it to 0.
+			if (this.state.visibleNodesActiveIndex === this.state.visibleNodes.length - 1) {
 				focusedNodeToFind = 0;
 			}
 			
 			this.setState({
-				visibleFocusedNodeId: focusedNodeToFind,
-				visibleFocusedNodeValue: this.state.visibleNodes[focusedNodeToFind]
+				visibleNodesActiveIndex: focusedNodeToFind,
+				visibleNodesActiveIdFromOriginalNodesData: this.state.visibleNodes[focusedNodeToFind]
 			});
 		});
 
@@ -185,6 +186,13 @@ class Tree extends React.Component {
 		Mousetrap.unbind('up', () => {});
 	}
 
+	onRequestFocus = (event, {ref}) => {
+		if (ref) {
+			this.activeSelectedOptionRef = ref;
+			this.activeSelectedOptionRef.focus();
+		}
+	}
+
 	handleMoveFocus = (direction) => {
 		let focusedNodeToFind;
 
@@ -193,22 +201,22 @@ class Tree extends React.Component {
 		if (direction !== 'next' && direction !== 'previous') {
 			return;
 		} else 	if (direction === 'next') {
-			focusedNodeToFind = this.state.visibleFocusedNodeId + 1;
-			// Allows "wrapping" of the nodes -- if the visibleFocusedNodeId is bigger than the array of visible nodes we manually set it to 0.
-			if (this.state.visibleFocusedNodeId === this.state.visibleNodes.length - 1) {
+			focusedNodeToFind = this.state.visibleNodesActiveIndex + 1;
+			// Allows "wrapping" of the nodes -- if the visibleNodesActiveIndex is bigger than the array of visible nodes we manually set it to 0.
+			if (this.state.visibleNodesActiveIndex === this.state.visibleNodes.length - 1) {
 				focusedNodeToFind = 0;
 			}
 		} else if (direction === 'previous') {
-			focusedNodeToFind = this.state.visibleFocusedNodeId - 1;
-			// Allows "wrapping" of the nodes -- if the visibleFocusedNodeId is 0, we manually set it to the last node in visible nodes.
-			if (this.state.visibleFocusedNodeId === 0) {
+			focusedNodeToFind = this.state.visibleNodesActiveIndex - 1;
+			// Allows "wrapping" of the nodes -- if the visibleNodesActiveIndex is 0, we manually set it to the last node in visible nodes.
+			if (this.state.visibleNodesActiveIndex === 0) {
 				focusedNodeToFind = this.state.visibleNodes.length - 1;
 			}
 		}
 
 		this.setState({
-			visibleFocusedNodeId: focusedNodeToFind,
-			visibleFocusedNodeValue: this.state.visibleNodes[focusedNodeToFind]
+			visibleNodesActiveIndex: focusedNodeToFind,
+			visibleNodesActiveIdFromOriginalNodesData: this.state.visibleNodes[focusedNodeToFind]
 		});
 	};
 
@@ -279,16 +287,16 @@ class Tree extends React.Component {
 			 */
 			theNode = this.getTreeNodeById(props.node.id);
 			
-			// We got one... so we'll need to set `visibleFocusedNodeId` and `visibleFocusedNodeValue` in state.
+			// We got one... so we'll need to set `visibleNodesActiveIndex` and `visibleNodesActiveIdFromOriginalNodesData` in state.
 			
-			// First we'll figure out where in the `visibleNodes` array the new `visibleFocusedNodeValue` is.
+			// First we'll figure out where in the `visibleNodes` array the new `visibleNodesActiveIdFromOriginalNodesData` is.
 			newVisibleFocusedNodeId = this.state.visibleNodes.indexOf(props.node.id);
 			newVisibleFocusedNodeValue = props.node.id;
-		} else if (this.state.visibleFocusedNodeValue !== -1) {
+		} else if (this.state.visibleNodesActiveIdFromOriginalNodesData !== -1) {
 			// ...so it was from keyboard shortcut, not from a mouse click.
-			theNode = this.getTreeNodeById(this.state.visibleFocusedNodeValue);
-			newVisibleFocusedNodeId = this.state.visibleNodes.indexOf(this.state.visibleFocusedNodeValue);
-			newVisibleFocusedNodeValue = this.state.visibleFocusedNodeValue;
+			theNode = this.getTreeNodeById(this.state.visibleNodesActiveIdFromOriginalNodesData);
+			newVisibleFocusedNodeId = this.state.visibleNodes.indexOf(this.state.visibleNodesActiveIdFromOriginalNodesData);
+			newVisibleFocusedNodeValue = this.state.visibleNodesActiveIdFromOriginalNodesData;
 		}
 
 		if (event.key === 'ArrowRight') {
@@ -352,8 +360,8 @@ class Tree extends React.Component {
 		this.setState({
 			visibleNodes: this._getVisibleNodes(this.state.nodes),
 			flattenedNodes: this._getFlattenedNodes(this.state.nodes),
-			visibleFocusedNodeId: newVisibleFocusedNodeId,
-			visibleFocusedNodeValue: newVisibleFocusedNodeValue
+			visibleNodesActiveIndex: newVisibleFocusedNodeId,
+			visibleNodesActiveIdFromOriginalNodesData: newVisibleFocusedNodeValue
 		});
 
 		// console.log(JSON.stringify(this.state.flattenedNodes));
@@ -493,16 +501,19 @@ class Tree extends React.Component {
 					id={`${id}__heading`}
 				>{headingText}</h4>
 				<Branch
+					treeHasFocus={this.state.treeHasFocus}
 					getNodes={this.props.getNodes}
 					initalClassName={listClassName}
-					visibleFocusedNodeId={this.state.visibleFocusedNodeId}
-					visibleFocusedNodeValue={this.state.visibleFocusedNodeValue}
+					visibleNodesActiveIndex={this.state.visibleNodesActiveIndex}
+					visibleNodesActiveIdFromOriginalNodesData={this.state.visibleNodesActiveIdFromOriginalNodesData}
 					htmlId={id}
 					initialStyle={listStyle}
 					level={0}
 					node={{ nodes }}
 					onClick={this.handleClick}
 					onExpandClick={this.handleExpandClick}
+					onRequestFocus={this.onRequestFocus}
+					requestFocus={this.state.requestFocus}
 					onScroll={onScroll}
 					searchTerm={searchTerm}
 					treeId={id}

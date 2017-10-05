@@ -53,6 +53,11 @@ const Item = (props) => {
 		<li
 			id={`${props.treeId}-${props.node.id}`}
 			role="treeitem"
+			ref={(component) => {
+				if (props.treeHasFocus && props.active) {
+					props.onRequestFocus(undefined, { ref: component });
+				}
+			}}
 			tabIndex={props.tabIndex}
 			aria-level={props.level}
 			aria-selected={isSelected ? 'true' : 'false'}

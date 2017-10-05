@@ -160,6 +160,12 @@ const renderBranch = (children, props) => {
 			aria-level={props.level}
 			aria-expanded={isExpanded ? 'true' : 'false'}
 			aria-selected={isSelected ? 'true' : 'false'}
+			aria-label={props.label}
+			ref={(component) => {
+				if (props.treeHasFocus && props.active) {
+					props.onRequestFocus(undefined, { ref: component });
+				}
+			}}
 		>
 			{/* eslint-disable jsx-a11y/no-static-element-interactions */}
 			<div
@@ -251,8 +257,8 @@ const Branch = (props) => {
 		level,
 		onExpandClick,
 		searchTerm,
-		visibleFocusedNodeId,
-		visibleFocusedNodeValue
+		visibleNodesActiveIndex,
+		visibleNodesActiveIdFromOriginalNodesData
 	} = props;
 
 	if (Array.isArray(props.getNodes(props.node))) {
@@ -273,12 +279,15 @@ const Branch = (props) => {
 						label={node.label}
 						level={level + 1}
 						node={node}
-						tabIndex={visibleFocusedNodeValue === node.id ? '0' : '-1'}
-						visibleFocusedNodeValue={visibleFocusedNodeValue}
-						visibleFocusedNodeId={visibleFocusedNodeId}
+						tabIndex={visibleNodesActiveIdFromOriginalNodesData === node.id ? '0' : '-1'}
+						active={visibleNodesActiveIdFromOriginalNodesData === node.id ? true : false}
+						visibleNodesActiveIdFromOriginalNodesData={visibleNodesActiveIdFromOriginalNodesData}
+						visibleNodesActiveIndex={visibleNodesActiveIndex}
 						nodes={node.nodes}
 						onClick={props.onClick}
 						onExpandClick={onExpandClick}
+						onRequestFocus={props.onRequestFocus}
+						treeHasFocus={props.treeHasFocus}
 						searchTerm={searchTerm}
 						treeId={treeId}
 						treeIndex={treeIndex}
@@ -291,11 +300,12 @@ const Branch = (props) => {
 						htmlId={htmlId}
 						key={shortid.generate()}
 						level={level + 1}
-						tabIndex={visibleFocusedNodeValue === node.id ? '0' : '-1'}
-						visibleFocusedNodeValue={visibleFocusedNodeValue}
-						visibleFocusedNodeId={visibleFocusedNodeId}
+						tabIndex={visibleNodesActiveIdFromOriginalNodesData === node.id ? '0' : '-1'}
+						active={visibleNodesActiveIdFromOriginalNodesData === node.id ? true : false}
 						node={node}
 						onClick={props.onClick}
+						onRequestFocus={props.onRequestFocus}
+						treeHasFocus={props.treeHasFocus}
 						searchTerm={searchTerm}
 						treeIndex={treeIndex}
 						treeId={treeId}
