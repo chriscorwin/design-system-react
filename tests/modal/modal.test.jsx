@@ -7,6 +7,7 @@ import TestUtils from 'react-dom/test-utils';
 import { expect } from 'chai';
 
 import { SLDSModal } from '../../components';
+import IconSettings from '../../components/icon-settings';
 
 const { Simulate } = TestUtils;
 
@@ -27,7 +28,7 @@ describe('SLDSModal: ', function () {
 
 	const renderModal = (modalInstance) => {
 		container = document.createElement('div');
-		const opener = <button>{modalInstance}</button>;
+		const opener = <button><IconSettings iconPath="/assets/icons">{modalInstance}</IconSettings></button>;
 		document.body.appendChild(container);
 		renderedNode = ReactDOM.render(opener, container);
 		return renderedNode;

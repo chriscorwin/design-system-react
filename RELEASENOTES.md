@@ -30,6 +30,99 @@ These are changes that have backwards-compatible solutions present and that comp
 
 ### Latest Release
 
+## Release 0.7.0
+
+###Breaking Changes###
+
+1. **Icons removed which brings DSR from 749KB down to somewhere around 430KB**
+- Icon JS objects have been removed except for the original `design-system-react.js` bundle. An additional bundle has been added `design-system-react-components.js` without bundled icons. See readme for use of `<IconSettings/>` to set icon context.
+- Devs now need to do two things if they're not using DSR with icons:
+	- You need to host your own icons (`npm install @salesforce-ux/icons` OR download them from SLDS website: https://core-210.lightningdesignsystem.com/downloads)
+	- You'll need to use the `<IconSettings />` higher order component and pass in the path to where you are hosting your own icons. It might look something like this:
+```
+import IconSettings from 'design-system-react/components/icon-settings';
+
+ReactDOM.render(
+	<IconSettings iconPath="/assets/icons">
+		<MyApp />
+	</IconSettings>,
+	document.getElementById('app')
+)
+
+# This component can be wrapped around the entire app and/or individual components using Icons.
+```
+
+2. Removed disabled styles from Tabs however you can still disable the Tab, and aria-disabled still appears on the Tab `<a>`. You'll just need to provide your own css for styling it.
+
+
+###Other Changes###
+- All CommonJS's `module.exports` have been removed.
+- Some initial compatibility testing with React 16 has been completed, but library is not fully tested.
+- Added `type="button"` to `Button` as default (markup change).
+- Added [SLDS Avatar](https://latest-212.lightningdesignsystem.com/components/avatar)
+- Lookup Prop
+	- Added new props isOpen, onRequestOpen, and onRequestClose to Lookup.
+- Dropdown Prop
+	- Added new prop `disabled` to Menu Item which gets passed to `aria-disabled` on `role="option"`. Pass it down through options like so:
+	```
+	<MenuDropdown
+		options={[
+			{ disabled: true, label: 'Option A', value: 'A0' },
+			{ label: 'Option B', value: 'B0' },
+			{ label: 'Custom Class', className: 'custom-item-class', value: 'custom0' }
+		]}
+		...
+	/>
+	```
+
+
+## Release 0.6.23
+Major features
+
+- Add [Combobox](https://react.lightningdesignsystem.com/components/comboboxes/) component
+
+## Release 0.6.22
+Major features
+
+- Add [RadioButtonGroup](https://react.lightningdesignsystem.com/components/radio-button-groups/) component
+
+Minor features
+
+- Picklist with multiselect: Add onPillRemove
+- Inline edit: Add onEnterEditMode, onLeaveEditMode, onKeyUp (for input)
+
+Bugfix
+
+- Fix Popover focus trap
+- Lookup: Close on tab and pass list ref with guard
+
+## Release 0.6.21
+**Bugfix Changes**
+
+- Allow Button Icon to accept external path for Icon
+
+## Release 0.6.20
+**Minor Changes**
+
+- Lookup: Add `onFocus` callback
+- Notification: Add icon category prop
+
+**Bugfix Changes**
+
+- Update Webpack loader for Tab CSS
+- Notification: `ref` to the Button component returned an object and now returns DOM node.
+- Popover: Update close button style
+
+## Release 0.6.19
+**Bugfix Changes**
+
+- DataTable: Change child component (action row) validation to use `displayName` instead of type/function compare.
+
+## Release 0.6.18
+**Bugfix Changes**
+
+- DataTable: Change child component validation to use `displayName` instead of type/function compare.
+
 ## Release 0.6.17
 **Minor Changes**
 - Add Progress Indicator
@@ -76,7 +169,7 @@ These are changes that have backwards-compatible solutions present and that comp
 
 - Update package.json dependencies
 - Switches to newest Heroku stack for deployment pipeline.
-- Fixes missing icons on Heroku PR apps. 
+- Fixes missing icons on Heroku PR apps.
 - Updates Jest and snapshots
 - Updates sinon and sinon-chai
 - Removes babel-eslint as a dependency

@@ -13,6 +13,7 @@
 
 // Import your external dependencies
 import React from 'react';
+import createReactClass from 'create-react-class';
 import ReactDOM from 'react-dom';
 import TestUtils from 'react-dom/test-utils';
 import { expect } from 'chai';
@@ -31,6 +32,7 @@ const { Simulate,
 	findRenderedDOMComponentWithClass } = TestUtils;
 
 import { SLDSProgressIndicator } from '../../components';
+import IconSettings from '../../components/icon-settings';
 
 const defaultProps = {
 	id: 'sample-progress-indicator'
@@ -38,7 +40,7 @@ const defaultProps = {
 
 const mockCallback = sinon.spy();
 
-const DemoComponent = React.createClass({
+const DemoComponent = createReactClass({
 	displayName: 'ProgressIndicatorDemoComponent',
 	propTypes: {
 		onStepClick: mockCallback,
@@ -51,7 +53,9 @@ const DemoComponent = React.createClass({
 
 	render () {
 		return (
-			<SLDSProgressIndicator {...this.props} />
+			<IconSettings iconPath="/assets/icons">
+				<SLDSProgressIndicator {...this.props} />
+			</IconSettings>
 		);
 	}
 });
@@ -188,7 +192,7 @@ describe('SLDSProgressIndicator: ', () => {
 			const item = this.wrapper.find('.slds-progress').find('.slds-tooltip-trigger');
 			expect(item).to.have.length(6);
 		});
-		
+
 		it('renders correct assistive text', function () {
 			const item = this.wrapper.find('.slds-progress')
 									.find('.slds-tooltip-trigger')
@@ -201,7 +205,7 @@ describe('SLDSProgressIndicator: ', () => {
 
 	describe('Click Event', () => {
 		const clickHandler = sinon.spy();
-		
+
 		beforeEach(mountComponent(
 			<DemoComponent steps={steps} selectedStep={steps[2]} completedSteps={steps.slice(0, 2)} onStepClick={clickHandler} />
 		));
@@ -222,7 +226,7 @@ describe('SLDSProgressIndicator: ', () => {
 		 * roles and screen reader text is present in the DOM.
 		 */
 		const focusHandler = sinon.spy();
-		
+
 		beforeEach(mountComponent(
 			<DemoComponent steps={steps} selectedStep={steps[2]} completedSteps={steps.slice(0, 2)} onStepFocus={focusHandler} />
 		));

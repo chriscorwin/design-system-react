@@ -3,6 +3,16 @@
 
 /* eslint-disable no-console, max-len */
 
+/*
+## You normally wouldn't need to do this but if you needed to create your own isolated build server, below are the steps:
+1. Create a Heroku app.
+2. Connect your App GitHub to the Github branch you wish to deploy and turn on automatic deploys for `master` branch.
+3. Create environment variable, `IS_BUILD_SERVER` and set to `true`.
+4. Create environment variable, `NPM_CONFIG_PRODUCTION` and set to `false`.
+5. Create environment variable, `ORIGIN` and set to `[git@github.com:[your username]/design-system-react.git]`
+6. Create environment variable, `GIT_SSH_KEY` and set to a user's private key (base64 encoded) that has access to your repository. `openssl base64 < [PRIVATE_KEY_FILENAME] | tr -d '\n' | pbcopy`
+*/
+
 import async from 'async';
 import fs from 'fs';
 import path from 'path';
@@ -56,10 +66,19 @@ const tasks = ({ release, done }) => {
 	{ command: 'git add icons/*' },
 	{ command: 'npm run build-docs' },
 	{ command: 'git add examples/component-docs.json' },
-	{ command: `rm -f ${release}.md && git add ${release}.md` },
+	{
+		ignoreCommand: !isBuildServer,
+		command: `rm -f ${release}.md`
+	},
+	{
+		// always commit because ${release}.md just got deleted if it is a release commit
+		ignoreCommand: !isBuildServer,
+		command: 'git commit -a -m "Clean up for release" -m "Build Server commit: Update release notes, commit inline icons (if needed), site component documentation (if needed). Remove patch.md or minor.md"'
+	},
 	{
 		// test if any files have changed, if they have then commit them
-		command: 'git diff --quiet && git diff --staged --quiet || git commit -m "Update release notes, inline icons (if needed), and site component documentation"'
+		ignoreCommand: isBuildServer,
+		command: 'git diff-index --quiet HEAD || git commit -m "Update release notes, inline icons (if needed), and site component documentation"'
 	},
 	{
 		ignoreCommand: isBuildServer,

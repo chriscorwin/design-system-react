@@ -79,10 +79,6 @@ const propTypes = {
 	*/
 	isOpen: PropTypes.bool,
 	/**
-	* This sets the location of the tooltip, if that location is different from the triggering node.
-	*/
-	target: PropTypes.node,
-	/**
 	 * CSS classes to be added to tag with `slds-tooltip-trigger`.
 	 */
 	triggerClassName: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.string]),
@@ -172,6 +168,7 @@ class PopoverTooltip extends React.Component {
 
 		return isOpen
 			? <Dialog
+				context={this.context}
 				closeOnTabKey
 				flippable={false}
 				marginBottom={getMargin.bottom(align)}
@@ -191,7 +188,8 @@ class PopoverTooltip extends React.Component {
 					'slds-popover',
 					'slds-popover--tooltip',
 					{ 'slds-theme_error': this.props.variant === 'error' },
-					getNubbinClassName(align))} role="tooltip"
+					getNubbinClassName(align))}
+					role="tooltip"
 				>
 					{this.getTooltipContent()}
 				</div>
@@ -247,10 +245,13 @@ class PopoverTooltip extends React.Component {
 
 }
 
+PopoverTooltip.contextTypes = {
+	iconPath: PropTypes.string
+};
 
 PopoverTooltip.displayName = displayName;
 PopoverTooltip.propTypes = propTypes;
 PopoverTooltip.defaultProps = defaultProps;
 
-module.exports = PopoverTooltip;
+export default PopoverTooltip;
 

@@ -11,6 +11,7 @@ import chaiEnzyme from 'chai-enzyme';
 // `this.wrapper` and `this.dom` is set in the helpers file
 import { mountComponent, unmountComponent } from '../enzyme-helpers';
 
+import IconSettings from '../../components/icon-settings';
 import Dropdown from '../../components/menu-dropdown';
 import List from '../../components/utilities/menu-list';
 
@@ -24,13 +25,13 @@ describe('SLDSMenuDropdown: ', () => {
 		{ label: 'A super short', value: 'A0' },
 		{ label: 'B Option Super Super Long', value: 'B0' },
 		{ label: 'C Option', value: 'C0' },
-		{ label: 'D Option', value: 'D0' }
+		{ disabled: true, label: 'D Option', value: 'D0' }
 	];
 
 	const renderDropdown = (inst) => {
 		body = document.createElement('div');
 		document.body.appendChild(body);
-		return ReactDOM.render(inst, body);
+		return ReactDOM.render(<IconSettings iconPath="/assets/icons">{inst}</IconSettings>, body);
 	};
 
 	function removeDropdownTrigger () {
@@ -276,7 +277,7 @@ describe('SLDSMenuDropdown: ', () => {
 			expect(getMenu(body)).to.equal(null);
 			Simulate.click(btn, {});
 			expect(getMenu(body).className).to.include('slds-dropdown');
-			
+
 			// close
 			Simulate.mouseEnter(btn, {});
 			Simulate.mouseLeave(btn);
@@ -344,6 +345,13 @@ describe('SLDSMenuDropdown: ', () => {
 			const match = (anchorRole === 'menuitem' || anchorRole === 'menuitemradio' || anchorRole === 'menuitemcheckbox');
 			expect(match).to.be.true;
 		});
+
+		it('if option.disabled, add aria-disabled to <a> that has role menuitem', () => {
+			Simulate.click(btn, {});
+			const items = getMenu(body).querySelectorAll('.slds-dropdown__item a');
+			const lastItemAriaDisabledRole = items[3].getAttribute('aria-disabled');
+			expect(lastItemAriaDisabledRole).to.equal('true');
+		});
 	});
 
 	describe('accessible markup for Icon Only Dropdowns', () => {
@@ -361,6 +369,11 @@ describe('SLDSMenuDropdown: ', () => {
 
 		afterEach(() => {
 			removeDropdownTrigger(btn);
+		});
+
+		it('<button> has assistiveText', () => {
+			const asstText = btn.getElementsByClassName('slds-assistive-text')[0].textContent;
+			expect(asstText).to.equal('more options');
 		});
 
 		it('<ul> has role menu & aria-labelledby', () => {
@@ -454,7 +467,7 @@ describe('SLDSMenuDropdown: ', () => {
 			expect(selected).to.be.false;
 			const checkItemLengthBefore = getMenu(body).querySelectorAll('.slds-dropdown__item svg').length;
 			expect(checkItemLengthBefore).to.equal(1);
-			
+
 			const items = getMenu(body).querySelectorAll('.slds-dropdown__item');
 			Simulate.click(items[0].querySelector('a'), {});
 			Simulate.click(items[1].querySelector('a'), {});
