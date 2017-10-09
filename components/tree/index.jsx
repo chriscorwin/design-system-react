@@ -227,11 +227,19 @@ class Tree extends React.Component {
 	
 	handleClick = (event, props) => {
 		if (isFunction(this.props.onClick)) {
+			console.group('[Tree > Index] handleClick runs!');
+			
+			// console.log('[Tree > Index] handleClick runs, event', event);
+			// console.log('[Tree > Index] handleClick runs, props', props);
+			console.log('[Tree > Index] handleClick runs, props.node', props.node);
+			// console.log('[Tree > Index] handleClick runs, props.node.selected', props.node.selected);
+			console.log('[Tree > Index] handleClick runs, !props.node.selected', !props.node.selected);
 			this.props.onClick(event, {
 				node: props.node,
 				select: !props.node.selected,
 				treeIndex: props.treeIndex
 			});
+			console.groupEnd();
 		}
 		
 		this.setState({

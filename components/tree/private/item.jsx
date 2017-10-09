@@ -29,6 +29,8 @@ import { TREE_ITEM } from '../../../utilities/constants';
 
 
 const	handleClick = (event, props) => {
+	console.group('[Tree > Item] handleClick runs!');
+	
 	console.log('[Tree > Item] handleClick runs, event', event);
 	console.log('[Tree > Item] handleClick runs, props', props);
 	EventUtil.trap(event);
@@ -40,6 +42,7 @@ const	handleClick = (event, props) => {
 			treeIndex: props.treeIndex
 		});
 	}
+	console.groupEnd();
 };
 
 /**
@@ -77,7 +80,7 @@ const Item = (props) => {
 					disabled
 				/>
 				{/* eslint-disable no-script-url */}
-				<a href="javascript:void(0)" role="presentation" className="slds-truncate">
+				<a href="javascript:void(0)" role="presentation" className="slds-truncate" tabIndex={-1}>
 					{/* eslint-enable no-script-url */}
 					<Highlighter search={props.searchTerm}>{props.label}</Highlighter>
 				</a>

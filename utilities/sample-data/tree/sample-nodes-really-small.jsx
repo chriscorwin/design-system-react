@@ -2,7 +2,7 @@ const treeNodesWithInitialState = [
 	{
 		label: 'Grains',
 		type: 'item',
-		id: 'Grains',
+		id: 'grains',
 		selected: true
 	},
 	{

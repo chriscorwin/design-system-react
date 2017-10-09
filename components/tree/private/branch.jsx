@@ -51,8 +51,13 @@ const handleExpandClick = (event, props) => {
 };
 
 const handleClick = (event, props) => {
+	console.group('[Tree > Branch] handleClick runs!');
+	
 	console.log('[Tree > Branch] handleClick runs, event', event);
+	console.log('[Tree > Branch] handleClick runs, props', props);
+
 	EventUtil.trap(event);
+
 	if (isFunction(props.onClick)) {
 		props.onClick(event, {
 			node: props.node,
@@ -60,6 +65,7 @@ const handleClick = (event, props) => {
 			treeIndex: props.treeIndex
 		});
 	}
+	console.groupEnd();
 };
 
 const handleScroll = (event, props) => {

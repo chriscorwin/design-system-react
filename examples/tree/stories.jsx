@@ -34,21 +34,18 @@ const DemoTree = createReactClass({
 	},
 
 	getInitialState () {
-		const initalNodes = this.props.exampleNodesIndex
-		? sampleNodes[this.props.exampleNodesIndex]
-		: sampleNodes.sampleNodesDefault;
+		const initalNodes = this.props.exampleNodesIndex ? sampleNodes[this.props.exampleNodesIndex] : sampleNodes.sampleNodesDefault;
 		return {
 			nodes: initalNodes,
 			searchTerm: this.props.searchable ? 'fruit' : undefined
 		};
 	},
 
-	// By default Tree can have multiple selected nodes and folders/branches can be selected. To disable either of these, you can use the following logic. However, `props` are immutable. The node passed in shouldn't be modified, and due to object and arrays being reference variables, forceUpate is needed. This is just a "working example" not a prescription.
 	handleExpandClick (event, data) {
 		branchExpandClicked('[Tree stories] Expand Branch runs!')(event, data);
 		// console.log('[Tree stories] Expand Branch runs!', event, data);
 		data.node.loading = data.expand ? true : undefined;
-
+		
 		// Fake delay to demonstrate use of loading node attibute
 		setTimeout((node) => {
 			node.loading = false;
@@ -56,23 +53,46 @@ const DemoTree = createReactClass({
 		}, 1, data.node);
 		data.node.expanded = data.expand;
 	},
-
+	
+	/**
+	 * By default Tree can have multiple selected nodes and folders/branches can be selected.
+	 *
+	 * To disable either of these, you can use the following logic.
+	 *
+	 * However, `props` are immutable.
+	 *
+	 * The node passed in shouldn't be modified, and due to object and arrays being reference variables,
+	 * forceUpate is needed.
+	 *
+	 * This is just a "working example" not a prescription.
+	 */
 	handleClick (event, data) {
-		console.log('[Tree stories] handleClick runs!');
+		console.group('[Stories > Tree] handleClick runs!');
 		if (this.props.singleSelection) {
+			console.group('this.props.singleSelection === ', this.props.singleSelection);
+			console.log('data.select', data.select);
+			console.log('data', data);
 			data.node.selected = data.select;
+			console.log('data.node', data.node);
 			this.setState({ singleSelection: data.node });
 			if (this.state.singleSelection) {
+				console.log('this.state.singleSelection', this.state.singleSelection);
 				this.state.singleSelection.selected = undefined;
+				console.log('this.state.singleSelection', this.state.singleSelection);
 			}
+			console.log('this.state.singleSelection', this.state.singleSelection);
 			this.forceUpdate();
+			console.log('this.state.singleSelection', this.state.singleSelection);
 			itemClicked('Node Clicked')(event, data);
+			console.groupEnd();
 		} else if (!this.props.noBranchSelection ||
-				(this.props.noBranchSelection && data.node.type !== 'branch')) {
-			data.node.selected = data.select;
-			this.forceUpdate();
-			itemClicked('Node Clicked')(event, data);
-		}
+			(this.props.noBranchSelection && data.node.type !== 'branch')) {
+				data.node.selected = data.select;
+				this.forceUpdate();
+				itemClicked('Node Clicked')(event, data);
+			}
+		console.log('this.state.singleSelection', this.state.singleSelection);
+		console.groupEnd();
 	},
 
 	handleScroll (event, data) {
