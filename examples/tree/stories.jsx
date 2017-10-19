@@ -37,7 +37,8 @@ const DemoTree = createReactClass({
 		const initalNodes = this.props.exampleNodesIndex ? sampleNodes[this.props.exampleNodesIndex] : sampleNodes.sampleNodesDefault;
 		return {
 			nodes: initalNodes,
-			searchTerm: this.props.searchable ? 'fruit' : undefined
+			searchTerm: this.props.searchable ? 'fruit' : undefined,
+			selectedNode: {}
 		};
 	},
 
@@ -67,32 +68,20 @@ const DemoTree = createReactClass({
 	 * This is just a "working example" not a prescription.
 	 */
 	handleClick (event, data) {
-		console.group('[Stories > Tree] handleClick runs!');
 		if (this.props.singleSelection) {
-			console.group('this.props.singleSelection === ', this.props.singleSelection);
-			console.log('data.select', data.select);
-			console.log('data', data);
 			data.node.selected = data.select;
-			console.log('data.node', data.node);
-			this.setState({ singleSelection: data.node });
-			if (this.state.singleSelection) {
-				console.log('this.state.singleSelection', this.state.singleSelection);
-				this.state.singleSelection.selected = undefined;
-				console.log('this.state.singleSelection', this.state.singleSelection);
+			this.setState({ selectedNode: data.node });
+			if (this.state.selectedNode.id !== data.node.id) {
+				this.state.selectedNode.selected = undefined;
 			}
-			console.log('this.state.singleSelection', this.state.singleSelection);
 			this.forceUpdate();
-			console.log('this.state.singleSelection', this.state.singleSelection);
 			itemClicked('Node Clicked')(event, data);
-			console.groupEnd();
 		} else if (!this.props.noBranchSelection ||
-			(this.props.noBranchSelection && data.node.type !== 'branch')) {
-				data.node.selected = data.select;
-				this.forceUpdate();
-				itemClicked('Node Clicked')(event, data);
-			}
-		console.log('this.state.singleSelection', this.state.singleSelection);
-		console.groupEnd();
+				(this.props.noBranchSelection && data.node.type !== 'branch')) {
+			data.node.selected = data.select;
+			this.forceUpdate();
+			itemClicked('Node Clicked')(event, data);
+		}
 	},
 
 	handleScroll (event, data) {
